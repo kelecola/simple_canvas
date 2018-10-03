@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <!-- 这个东西就是你的画布 -->
+    <canvas id="draw" width="800px" height="800px"></canvas>
+</body>
+<script>
+    let mydraw = document.getElementById('draw');
+    if (mydraw.getContext) {
+        //获取2d的上下文
+        //这个东西就和画笔一样
+        var mypen = mydraw.getContext('2d');
+        // mypen.strokeStyle = 'red';
+        // 还是原来的单线程，从上到下执行，一个一个的画
+        mypen.fillStyle = 'red';
+        mypen.fillRect(10, 10, 50, 50);
+        //这个就跟吧笔换个颜色一样，但是写法是有点麻烦的，我切回原来的画笔不是很麻烦么。
+        mypen.fillStyle = 'rgba(0, 0, 225, 0.5)';
+        mypen.fillRect(30, 30, 50, 50);
+
+        // 这个是清除某个区域
+        mypen.clearRect(40, 40, 10, 10);
+        mypen.beginPath();
+        mypen.arc(200, 200, 100, 0, 2 * Math.PI, false);
+        // 在绘制内圆的时候，要把路径移动到内圆的某一点上
+        // 因为这个下笔的点还在外圆上你要抬起笔，放到内圆才能继续作画
+        mypen.moveTo(294, 200);
+        mypen.arc(200, 200, 94, 0, 2 * Math.PI, false);
+        // 思维是棒棒哒，但是唯一漏洞就是没有考虑到实际情况
+        // 实际情况是时针要比分针短这个实际情况
+        // 学到这个地步我就知道了，前端不仅仅是前端了，你还得算很多东西，写很多方程式。
+        // 哈哈感觉自己的优势很大，加油好好学习吧，这个拿下了可以去要20k了
+        mypen.moveTo(200, 200);
+        mypen.lineTo(200, 110);
+        mypen.moveTo(200, 200);
+        mypen.lineTo(140, 200);
+        mypen.arcTo(300, 300, 300, 600, 300);
+        mypen.bezierCurveTo(400, 400, 500, 500, 600, 600);
+        mypen.font = 'bold 14px Arial';
+        mypen.textAlign = 'center';
+        mypen.textBaseline = 'middle';
+        //果然出不来肯定是有问题的mypen.fillText()这个是一个方法
+        //不是一个对象 
+        //在这个对象中有可以共享的数据，也有自己独特的数据，这种感觉
+        mypen.fillText('12', 200, 200);
+        mypen.textAlign = 'start';
+        mypen.fillText('12', 200, 300);
+        mypen.textAlign = 'end';
+        mypen.fillText('12', 200, 400);
+        //这个是很重要的描边，没有这个只是想象要画一个圆
+        //这个是检测的方法点是不是在线上
+        if (mypen.isPointInPath(200, 200)) {
+            console.log('yes');
+        }
+        mypen.stroke();
+        // 这样看下来，这个图像的操作对于对象的使用就很重要了
+    }
+</script>
+
+</html>
